@@ -42,6 +42,16 @@ public:
     // Contrat :
     //
 
+		void affichageMapPages (map <int, infosPage> & mapPages);
+
+		template <typename M>
+		void affichage2 (const M & m);
+
+		void add (string ligne);
+
+		void split (string ligne, vector<string> & ligneHach);
+
+
 
 //------------------------------------------------- Surcharge d'opérateurs
     //~ Graph & operator = ( const Graph & unGraph );
@@ -79,6 +89,8 @@ protected:
 map <int, infosPage> mapPages;
 map <int, string> index;
 map <string, int> indexInv;
+
+int indicePage;
 
 string nomLog;
 };

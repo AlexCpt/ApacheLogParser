@@ -62,7 +62,7 @@ public:
     //~ //
 
 
-    Ligne (string ligne, map <int,infosPage> & mapPages, map <int,string> & index, map <string,int> & indexInv, int i);
+    Ligne (string ligne, map <int,infosPage> & mapPages, map <int,string> & index, map <string,int> & indexInv);
     // Mode d'emploi :
     //
     // Contrat :
@@ -81,6 +81,7 @@ protected:
 
 //----------------------------------------------------- Attributs protégés
 vector <string> element;
+int i;
 
 };
 

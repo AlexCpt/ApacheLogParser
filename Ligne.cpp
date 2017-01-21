@@ -10,18 +10,17 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-using namespace std;
 #include <string>
 #include <vector>
 #include <map>
 #include <iostream>
+using namespace std;
 //------------------------------------------------------ Include personnel
 #include "Ligne.h"
 #include "Graph.h"
 
 
 //------------------------------------------------------------- Constantes
-const string delimiteur = " ";
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
@@ -58,7 +57,7 @@ const string delimiteur = " ";
 //~ } //----- Fin de Ligne (constructeur de copie)
 
 
-Ligne::Ligne (string ligne, map <int,infosPage> & mapPages, map <int,string> & index, map <string,int> & indexInv, int i) // i static ?
+Ligne::Ligne (string ligne, map <int,infosPage> & mapPages, map <int,string> & index, map <string,int> & indexInv) // i static ?
 // Algorithme :
 //
 {
@@ -66,57 +65,13 @@ Ligne::Ligne (string ligne, map <int,infosPage> & mapPages, map <int,string> & i
     cout << "Appel au constructeur de <Ligne>" << endl;
 #endif
 
-  //Découpage de la ligne : (pas générique)
-  vector<string> ligneHach;    // Pas forcément vector??????
-  split(ligne, ligneHach);
 
-  affichage2(ligneHach);
-
-  //On check si la page existe
-  map <string,int>::iterator itIndexInv;
-  const string urlGet = ligneHach[6];
-  itIndexInv = indexInv.find(urlGet) ;// URL de la page on compte les GET
-
-  //Si oui on augmente le nombre de hits
-  if(itIndexInv != indexInv.end())
-  {
-    map <int,infosPage>::iterator itPages;
-
-    //get le i qui correspond à l'url
-    itPages = mapPages.find(itIndexInv->second);
-    itPages->second.hits ++;
-  }
-
-  //Sinon on la crée
-  else if(itIndexInv == indexInv.end())
-  {
-    infosPage monInfosPages(1);
-    mapPages.insert(make_pair(i, monInfosPages)); // ou insert({i, monInfosPages})
-    index.insert(make_pair(i, urlGet));
-    indexInv.insert(make_pair(urlGet, i));
-  }
+  
 
 
 } //----- Fin de Ligne
 
 
-void Ligne::split (string ligne, vector<string> & ligneHach)
-{
-    int pos = 0;
-    int pos1 = 0;
-
-    pos1 = ligne.find(delimiteur, pos);
-
-    while(pos1 != -1)
-    {
-
-  		ligneHach.push_back(ligne.substr(pos, pos1-pos));
-  		pos = pos1+1;
-
-      pos1 = ligne.find(delimiteur, pos);
-
-    }
-} //----- Fin de Méthode
 
 //affichage vector
 void Ligne::affichage1 (const vector<string> vect)
@@ -129,7 +84,7 @@ void Ligne::affichage1 (const vector<string> vect)
 
 }
 
-//afichage générique
+//affichage générique
 template <typename M>
 void Ligne::affichage2 (const M & m)
 {

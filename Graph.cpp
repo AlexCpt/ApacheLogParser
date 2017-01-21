@@ -10,16 +10,19 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-using namespace std;
 #include <iostream>
 #include <map>
+#include <vector>
+#include <string>
 
+using namespace std;
 //------------------------------------------------------ Include personnel
 #include "Graph.h"
 #include "lecteurLog.h"
 
 
 //------------------------------------------------------------- Constantes
+const string delimiteur = " ";
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
@@ -28,6 +31,74 @@ using namespace std;
 //
 //{
 //} //----- Fin de Méthode
+//affichage générique
+
+template <typename M>
+void Graph::affichage2 (const M & m)
+{
+  for (typename M::const_iterator it = m.cbegin() ; it!= m.cend(); it++)
+  {
+    cout << "Page indice : "<< it->first;
+
+    cout << "   hits : " <<it->second.hits<<endl;
+    }
+  cout << endl;
+}
+
+void Graph::add (string ligne)
+{
+  //Découpage de la ligne : (pas générique)
+  vector<string> ligneHach;    // Pas forcément vector??????
+  split(ligne, ligneHach);
+
+  //affichage2(ligneHach);
+
+  //On check si la page existe
+  map <string,int>::iterator itIndexInv;
+  const string urlGet = ligneHach[6];
+  itIndexInv = indexInv.find(urlGet) ;// URL de la page on compte les GET
+
+  //Si oui on augmente le nombre de hits
+  if(itIndexInv != indexInv.end())
+  {
+    map <int,infosPage>::iterator itPages;
+
+    //get le i qui correspond à l'url
+    itPages = mapPages.find(itIndexInv->second);
+    itPages->second.hits ++;
+  }
+
+  //Sinon on la crée
+  else if(itIndexInv == indexInv.end())
+  {
+    infosPage monInfosPages(1);
+    mapPages.insert(make_pair(indicePage, monInfosPages)); // ou insert({i, monInfosPages})
+    index.insert(make_pair(indicePage, urlGet));
+    indexInv.insert(make_pair(urlGet, indicePage));
+
+    indicePage++;
+  }
+}
+
+
+
+void Graph::split (string ligne, vector<string> & ligneHach)
+{
+    int pos = 0;
+    int pos1 = 0;
+
+    pos1 = ligne.find(delimiteur, pos);
+
+    while(pos1 != -1)
+    {
+
+  		ligneHach.push_back(ligne.substr(pos, pos1-pos));
+  		pos = pos1+1;
+
+      pos1 = ligne.find(delimiteur, pos);
+
+    }
+} //----- Fin de Méthode
 
 
 //------------------------------------------------- Surcharge d'opérateurs
@@ -56,18 +127,21 @@ using namespace std;
 
 
 Graph::Graph (string nl, string nD, bool eDoc, int h)
-// Algorithme :
-//
 {
 #ifdef DEBUG
     cout << "Appel au constructeur de <Graph>" << endl;
 #endif
 	nomLog = nl;
 
+  indicePage =0;
+
 	//Création du lecteur
 	lecteurLog monlecteurLog;
 
-	monlecteurLog.read(nomLog, eDoc, h, mapPages, index, indexInv); // PLUTOT FAIRE CLASSES AMIES ?
+	monlecteurLog.read(nomLog, eDoc, h, this); // PLUTOT FAIRE CLASSES AMIES ?
+
+  //affichageMapPages(mapPages);
+  affichage2(mapPages);
 
 
 } //----- Fin de Graph

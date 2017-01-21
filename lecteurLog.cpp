@@ -10,12 +10,12 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-using namespace std;
 #include <iostream>
 #include <fstream>
 #include <map>
 #include <vector>
 #include <Algorithm> // pour affichage3
+using namespace std;
 //------------------------------------------------------ Include personnel
 #include "lecteurLog.h"
 #include "Graph.h"
@@ -25,12 +25,11 @@ using namespace std;
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
- void lecteurLog::read (string nl, bool eDoc, int h, map <int,infosPage> & mapPages, map <int,string> & index,map  <string,int> & indexInv)
+ void lecteurLog::read (string nl, bool eDoc, int h, Graph * monGraph)
 // Algorithme :
 {
 	nomLog = nl;
 	string ligneFichier;
-  int i = 0;
 
 	ifstream fichier(nomLog.c_str(), ios::in);
 
@@ -39,9 +38,8 @@ using namespace std;
 		 // ON LIT ET ON COUPE EN MORCEAUX
 		 while(getline(fichier, ligneFichier))
 		 {
-        Ligne maligne(ligneFichier, mapPages, index, indexInv, i);
-        i++;
-
+        //Ligne maligne(ligneFichier, mapPages, index, indexInv);
+        monGraph->add(ligneFichier);
 		 }
 
 

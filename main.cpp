@@ -10,12 +10,12 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-using namespace std;
 #include <iostream>
 #include <string>
 #include <vector>
 #include "string.h"
 #include <sstream>
+using namespace std;
 //------------------------------------------------------ Include personnel
 #include "Graph.h"
 //------------------------------------------------------------- Constantes
@@ -90,6 +90,7 @@ int main (int argc, char *argv[])
 
 	//Création du graph
 	Graph monGraph(nomLog, nomDot, excluDoc, heure);
+	
 
 
 	return 0;
