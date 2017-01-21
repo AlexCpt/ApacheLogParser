@@ -23,6 +23,7 @@ using namespace std;
 
 //------------------------------------------------------------- Constantes
 const string delimiteur = " ";
+#define TAILLE_TAB_HIGH_HIT 10
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
@@ -38,11 +39,33 @@ void Graph::affichage2 (const M & m)
 {
   for (typename M::const_iterator it = m.cbegin() ; it!= m.cend(); it++)
   {
-    cout << "Page indice : "<< it->first;
+    map<int, string>::iterator itIndex;
+    itIndex = index.find(it->first);
 
-    cout << "   hits : " <<it->second.hits<<endl;
-    }
+    cout << itIndex->second;
+
+    cout << " (" <<it->second.hits << " hit(s))"<<endl;
+  }
   cout << endl;
+}
+
+void Graph::affichageTopHits ()
+{
+  cout << "Affichage Top 10 hits" <<endl;
+  for(vector<int>::iterator itTab = tabIndiceMaxHits.begin(); itTab != tabIndiceMaxHits.end(); itTab++)
+  {
+    map<int, string>::iterator itIndex;
+    itIndex = index.find(*itTab);
+
+    map<int, infosPage>::iterator itPage;
+    itPage = mapPages.find(*itTab);
+
+    cout << itIndex->second;
+    cout << " (" <<itPage->second.hits << " hit(s))"<<endl;
+  }
+  cout << endl;
+
+
 }
 
 void Graph::add (string ligne)
@@ -51,12 +74,62 @@ void Graph::add (string ligne)
   vector<string> ligneHach;    // Pas forcément vector??????
   split(ligne, ligneHach);
 
-  //affichage2(ligneHach);
+  //URL du GET
+  const string urlGet = ligneHach[6];
+  const string heureRequete = ligneHach[3];
+  const int heureIntRequete = stoi(heureRequete.substr(13,2));
+
+  //On check si pas doc
+  if(excluDoc)
+  {
+    if(urlGet.find(".jpg") != -1)
+    {
+      return;
+    }
+    else if(urlGet.find(".jpeg") != -1)
+    {
+      return;
+    }
+    else if(urlGet.find(".tiff") != -1)
+    {
+      return;
+    }
+    else if(urlGet.find(".gif") != -1)
+    {
+      return;
+    }
+    else if(urlGet.find(".png") != -1)
+    {
+      return;
+    }
+    else if(urlGet.find(".bmp") != -1)
+    {
+      return;
+    }
+    else if(urlGet.find(".ico") != -1)
+    {
+      return;
+    }
+    else if(urlGet.find(".css") != -1)
+    {
+      return;
+    }
+    else if(urlGet.find(".js") != -1)
+    {
+      return;
+    }
+  }
+  if(heure != -1)
+  {
+    if(heureIntRequete != heure)
+    {
+      return;
+    }
+  }
 
   //On check si la page existe
   map <string,int>::iterator itIndexInv;
-  const string urlGet = ligneHach[6];
-  itIndexInv = indexInv.find(urlGet) ;// URL de la page on compte les GET
+  itIndexInv = indexInv.find(urlGet);// URL de la page GET
 
   //Si oui on augmente le nombre de hits
   if(itIndexInv != indexInv.end())
@@ -66,6 +139,10 @@ void Graph::add (string ligne)
     //get le i qui correspond à l'url
     itPages = mapPages.find(itIndexInv->second);
     itPages->second.hits ++;
+
+    majHighHit(itPages);
+
+
   }
 
   //Sinon on la crée
@@ -76,11 +153,54 @@ void Graph::add (string ligne)
     index.insert(make_pair(indicePage, urlGet));
     indexInv.insert(make_pair(urlGet, indicePage));
 
+    //majHighHit(itPages); AUSSI ICI
+
+
     indicePage++;
   }
 }
 
+// On met à jour le tab par rapport au nouveau it (JE ME DEMANDE SI LA METHODE multimap inversée est pas plus simple)
+void Graph::majHighHit(map<int,infosPage>::iterator & it)
+{
+    //on cherche le hit mini
+    map<int,infosPage>::iterator itMapPage;
+    itMapPage = mapPages.find(tabIndiceMaxHits[TAILLE_TAB_HIGH_HIT-1]);
+    int hitMini = itMapPage->second.hits;
 
+
+    if(it->second.hits < hitMini)
+    {
+      return;
+    }
+    else
+    {
+        for(vector<int>::iterator itTab = tabIndiceMaxHits.begin(); itTab != tabIndiceMaxHits.end(); itTab++)
+        {
+          itMapPage = mapPages.find(*itTab);
+          if(it->second.hits > itMapPage->second.hits)
+          {
+            //on vérifie si indice pas déjà dedans
+            vector<int>::iterator dejaPresent = find(tabIndiceMaxHits.begin(), tabIndiceMaxHits.end(), it->first);
+
+            if(dejaPresent != tabIndiceMaxHits.end())
+            {
+              //si oui on l'efface
+              tabIndiceMaxHits.erase(dejaPresent);
+              tabIndiceMaxHits.insert(itTab, it->first);
+              return;
+            }
+            else
+            {
+              //sinon on efface le dernier
+              tabIndiceMaxHits.pop_back();
+              tabIndiceMaxHits.insert(itTab, it->first);
+              return;
+            }
+          }
+        }
+    }
+}
 
 void Graph::split (string ligne, vector<string> & ligneHach)
 {
@@ -134,14 +254,27 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
 	nomLog = nl;
 
   indicePage =0;
+  excluDoc = eDoc;
+  heure = h;
+  tabIndiceMaxHits = vector<int>(10);
+
 
 	//Création du lecteur
 	lecteurLog monlecteurLog;
 
 	monlecteurLog.read(nomLog, eDoc, h, this); // PLUTOT FAIRE CLASSES AMIES ?
 
+
+  //Affichage tableau top hits
+  affichageTopHits();
+  
+  //Affichage de tout
   //affichageMapPages(mapPages);
   affichage2(mapPages);
+
+
+
+
 
 
 } //----- Fin de Graph

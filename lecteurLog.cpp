@@ -38,7 +38,6 @@ using namespace std;
 		 // ON LIT ET ON COUPE EN MORCEAUX
 		 while(getline(fichier, ligneFichier))
 		 {
-        //Ligne maligne(ligneFichier, mapPages, index, indexInv);
         monGraph->add(ligneFichier);
 		 }
 

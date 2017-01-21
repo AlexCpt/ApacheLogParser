@@ -51,6 +51,10 @@ public:
 
 		void split (string ligne, vector<string> & ligneHach);
 
+		void majHighHit(map<int,infosPage>::iterator & it);
+
+		void affichageTopHits ();
+
 
 
 //------------------------------------------------- Surcharge d'opérateurs
@@ -90,7 +94,11 @@ map <int, infosPage> mapPages;
 map <int, string> index;
 map <string, int> indexInv;
 
+vector<int>  tabIndiceMaxHits; // Par ordre croissant (IDEE stocker nombre de hits aussi ?)
+
 int indicePage;
+bool excluDoc;
+int heure;
 
 string nomLog;
 };

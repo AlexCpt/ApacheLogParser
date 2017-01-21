@@ -38,16 +38,17 @@ int main (int argc, char *argv[])
 
 	string nomDot;
 	bool excluDoc = false;
-	int heure = 0;
+	int heure = -1;
 	string nomLog = argv[argc-1];
 
 	for(int i = 1 ; i<argc-1; i++)
 	{
-		if(strcmp(argv[i],"-e"))
+		if(strcmp(argv[i],"-e") == 0)
 		{
 			excluDoc = true;
+			cout << "coucou";
 		}
-		else if(strcmp(argv[i],"-g"))
+		else if(strcmp(argv[i],"-g") == 0)
 		{
 			i++;
 			nomDot = argv[i];
@@ -57,7 +58,7 @@ int main (int argc, char *argv[])
 				return 1;
 			}
 		}
-		else if(strcmp(argv[i],"-t"))
+		else if(strcmp(argv[i],"-t") == 0)
 		{
 			i++;
 
@@ -90,7 +91,7 @@ int main (int argc, char *argv[])
 
 	//Création du graph
 	Graph monGraph(nomLog, nomDot, excluDoc, heure);
-	
+
 
 
 	return 0;
