@@ -1,0 +1,2 @@
+192.168.15.162 - - [02/Oct/2012:11:18:10 +0200] "GET /SiteWebIF/Intranet-etudiant.php HTTP/1.1" 200 1815 "http://if.insa-lyon.fr/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.79 Safari/537.4"
+192.168.15.162 - - [02/Oct/2012:11:18:11 +0200] "GET /SiteWebIF/Intranet-etudiant.php HTTP/1.1" 200 1815 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.79 Safari/537.4"

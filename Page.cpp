@@ -1,29 +1,29 @@
 /*************************************************************************
-                           Graph  -  description
+                           Page  -  description
                              -------------------
     début                : 11/01/2017
     copyright            : (C) 2017 par Mathieu POURBAIX et Alexandre CARPENTIER
 *************************************************************************/
 
-//---------- Réalisation de la classe <Graph> (fichier Graph.cpp) -------
+//---------- Réalisation de la classe <Page> (fichier Page.cpp) -------
 
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
 using namespace std;
 #include <iostream>
-#include <map>
+#include <vector>
+#include <string>
 
 //------------------------------------------------------ Include personnel
-#include "Graph.h"
-#include "lecteurLog.h"
+#include "Page.h"
 
 
 //------------------------------------------------------------- Constantes
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type Graph::Méthode ( liste des paramètres )
+// type Page::Méthode ( liste des paramètres )
 // Algorithme :
 //
 //{
@@ -31,12 +31,12 @@ using namespace std;
 
 
 //------------------------------------------------- Surcharge d'opérateurs
-//~ Graph & Graph::operator = ( const Graph & unGraph )
+//~ Page & Page::operator = ( const Page & unPage )
 //~ // Algorithme :
 //~ //
 //~ {
 //~ #ifdef DEBUG
-    //~ cout << "Appel a la surcharge de l operateur d affectation de <Graph>" << endl;
+    //~ cout << "Appel a la surcharge de l operateur d affectation de <Page>" << endl;
 //~ #endif
 	//~ cout << "Votre code a inserer ici ..." << endl;
 	//~ return *this;
@@ -44,47 +44,41 @@ using namespace std;
 
 
 //-------------------------------------------- Constructeurs - destructeur
-//~ Graph::Graph ( const Graph & unGraph )
+//~ Page::Page ( const Page & unPage )
 //~ // Algorithme :
 //~ //
 //~ {
 //~ #ifdef DEBUG
-    //~ cout << "Appel au constructeur de copie de <Graph>" << endl;
+    //~ cout << "Appel au constructeur de copie de <Page>" << endl;
 //~ #endif
 	//~ cout << "Votre code a inserer ici ..." << endl;
-//~ } //----- Fin de Graph (constructeur de copie)
+//~ } //----- Fin de Page (constructeur de copie)
 
 
-Graph::Graph (string nl, string nD, bool eDoc, int h)
+Page::Page (vector <string> ligneHach)
+{
+#ifdef DEBUG
+    cout << "Appel au constructeur de <Page>" << endl;
+#endif
+
+  
+
+
+} //----- Fin de Page
+
+
+
+
+
+
+Page::~Page ( )
 // Algorithme :
 //
 {
 #ifdef DEBUG
-    cout << "Appel au constructeur de <Graph>" << endl;
+    cout << "Appel au destructeur de <Page>" << endl;
 #endif
-	nomLog = nl;
-
-	//Création du lecteur
-	lecteurLog monlecteurLog;
-
-	monlecteurLog.read(nomLog, eDoc, h, mapPages, index, indexInv);
-
-
-} //----- Fin de Graph
-
-
-
-
-
-
-Graph::~Graph ( )
-// Algorithme :
-//
-{
-#ifdef DEBUG
-    cout << "Appel au destructeur de <Graph>" << endl;
-#endif
-} //----- Fin de ~Graph
+} //----- Fin de ~Page
 
 
 //------------------------------------------------------------------ PRIVE

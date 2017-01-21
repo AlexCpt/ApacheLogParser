@@ -1,6 +1,6 @@
 EXE=analog
 COMP=g++ -std=c++11 -Wall -c -g
-INT= main.h lecteurLog.h Graph.h
+INT= main.h lecteurLog.h Graph.h Ligne.h
 REAL=$(INT:.h=.cpp)
 OBJ=$(REAL:.cpp=.o)
 EFFACE=clean
@@ -20,6 +20,10 @@ $(EFFACE):$(OBJ)
 	 $(RM) -f $(EXE) $(OBJ)
 
 
-main.o : main.cpp 
+main.o : main.cpp
 
 lecteurLog.o : lecteurLog.cpp lecteurLog.h
+
+Ligne.o : Ligne.cpp Ligne.h
+
+Graph.o : Graph.cpp Graph.h

@@ -1,36 +1,28 @@
 /*************************************************************************
-                           Graph  -  description
+                           Page  -  description
                              -------------------
     début                : 11/01/2017
     copyright            : (C) 2017 par Mathieu POURBAIX et Alexandre CARPENTIER
 *************************************************************************/
 
-//---------- Interface de la classe <Graph> (fichier Graph.h) ------
-#if ! defined ( Graph_H )
-#define Graph_H
+//---------- Interface de la classe <Page> (fichier Page.h) ------
+#if ! defined ( Page_H )
+#define Page_H
 
 
 //--------------------------------------------------- Interfaces utilisées
-#include <map>
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
 
-struct infosPage
-{
-	int hits;
-	map<int, int> connexions; //code page, nombre hits sortants
 
-	infosPage(int h=0):
-	hits(h){}
-};
 //------------------------------------------------------------------------
-// Role de la classe <Graph>
-//
-//
+// Role de la classe <Page>
+// La classe page correspond à une page du serveur. Elle stocke son numéro (on utilise
+// l'index pour retrouver l'URL), le nombre de hits et map de ses connexions sortantes.
 //------------------------------------------------------------------------
 
-class Graph
+class Page
 {
 //----------------------------------------------------------------- PUBLIC
 
@@ -44,7 +36,7 @@ public:
 
 
 //------------------------------------------------- Surcharge d'opérateurs
-    //~ Graph & operator = ( const Graph & unGraph );
+    //~ Page & operator = ( const Page & unPage );
     //~ // Mode d'emploi :
     //~ //
     //~ // Contrat :
@@ -52,19 +44,19 @@ public:
 //~
 
 //-------------------------------------------- Constructeurs - destructeur
-    //~ Graph ( const Graph & unGraph );
+    //~ Page ( const Page & unPage );
     //~ // Mode d'emploi (constructeur de copie) :
     //~ //
     //~ // Contrat :
     //~ //
 
-    Graph (string nl, string nD, bool eDoc, int h);
+    Page (vector <string> ligneHach)
     // Mode d'emploi :
     //
     // Contrat :
     //
 
-    virtual ~Graph ( );
+    virtual ~Page ( );
     // Mode d'emploi :
     //
     // Contrat :
@@ -76,13 +68,9 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-map <int, infosPage> mapPages;
-map <int, string> index;
-map <string, int> indexInv;
 
-string nomLog;
 };
 
-//--------------------------- Autres définitions dépendantes de <Graph>
+//--------------------------- Autres définitions dépendantes de <Page>
 
 #endif // ${include_guard_symbol}
