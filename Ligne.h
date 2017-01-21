@@ -62,7 +62,7 @@ public:
     //~ //
 
 
-    Ligne (string ligne, map <int,infosPage> & mapPages, map <int,string> & index, map <string,int> & indexInv);
+    Ligne (string ligne, map <int,infosPage> & mapPages, map <int,string> & index, map <string,int> & indexInv, int i);
     // Mode d'emploi :
     //
     // Contrat :

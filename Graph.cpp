@@ -67,10 +67,12 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
 	//Création du lecteur
 	lecteurLog monlecteurLog;
 
-	monlecteurLog.read(nomLog, eDoc, h, mapPages, index, indexInv);
+	monlecteurLog.read(nomLog, eDoc, h, mapPages, index, indexInv); // PLUTOT FAIRE CLASSES AMIES ?
 
 
 } //----- Fin de Graph
+
+
 
 
 

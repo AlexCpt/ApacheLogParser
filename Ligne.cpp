@@ -58,7 +58,7 @@ const string delimiteur = " ";
 //~ } //----- Fin de Ligne (constructeur de copie)
 
 
-Ligne::Ligne (string ligne, map <int,infosPage> & mapPages, map <int,string> & index, map <string,int> & indexInv)
+Ligne::Ligne (string ligne, map <int,infosPage> & mapPages, map <int,string> & index, map <string,int> & indexInv, int i) // i static ?
 // Algorithme :
 //
 {
@@ -70,14 +70,31 @@ Ligne::Ligne (string ligne, map <int,infosPage> & mapPages, map <int,string> & i
   vector<string> ligneHach;    // Pas forcément vector??????
   split(ligne, ligneHach);
 
-  affichage3(ligneHach);
+  affichage2(ligneHach);
 
   //On check si la page existe
-  //index.find()
-  //Si oui on augment le nombre de hits
+  map <string,int>::iterator itIndexInv;
+  const string urlGet = ligneHach[6];
+  itIndexInv = indexInv.find(urlGet) ;// URL de la page on compte les GET
+
+  //Si oui on augmente le nombre de hits
+  if(itIndexInv != indexInv.end())
+  {
+    map <int,infosPage>::iterator itPages;
+
+    //get le i qui correspond à l'url
+    itPages = mapPages.find(itIndexInv->second);
+    itPages->second.hits ++;
+  }
 
   //Sinon on la crée
-
+  else if(itIndexInv == indexInv.end())
+  {
+    infosPage monInfosPages(1);
+    mapPages.insert(make_pair(i, monInfosPages)); // ou insert({i, monInfosPages})
+    index.insert(make_pair(i, urlGet));
+    indexInv.insert(make_pair(urlGet, i));
+  }
 
 
 } //----- Fin de Ligne
@@ -108,6 +125,8 @@ void Ligne::affichage1 (const vector<string> vect)
   {
     cout << vect[i] << endl;
   }
+  cout << endl;
+
 }
 
 //afichage générique
@@ -118,14 +137,15 @@ void Ligne::affichage2 (const M & m)
   {
     cout << *it <<endl;
   }
+  cout << endl;
 }
 
-//affichage vetor avec outpu_itérateurs générique ?
+//affichage vetor avec output_itérateurs générique ?
 template <typename M>
 void Ligne::affichage3 (const M & m)
 {
   copy(m.begin(), m.end(), ostream_iterator <string> (cout, " "));
-  cout << endl;
+  cout << endl << endl;
 }
 
 
