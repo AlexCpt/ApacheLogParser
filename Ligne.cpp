@@ -65,10 +65,6 @@ Ligne::Ligne (string ligne, map <int,infosPage> & mapPages, map <int,string> & i
     cout << "Appel au constructeur de <Ligne>" << endl;
 #endif
 
-
-  
-
-
 } //----- Fin de Ligne
 
 

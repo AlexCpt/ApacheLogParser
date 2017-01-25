@@ -93,6 +93,7 @@ protected:
 map <int, infosPage> mapPages;
 map <int, string> index;
 map <string, int> indexInv;
+multimap <int, int> mapHits; //<hits, indice>
 
 vector<int>  tabIndiceMaxHits; // Par ordre croissant (IDEE stocker nombre de hits aussi ?)
 

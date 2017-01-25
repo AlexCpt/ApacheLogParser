@@ -75,9 +75,13 @@ void Graph::add (string ligne)
   split(ligne, ligneHach);
 
   //URL du GET
-  const string urlGet = ligneHach[6];
+  string urlGet = ligneHach[6];
   const string heureRequete = ligneHach[3];
   const int heureIntRequete = stoi(heureRequete.substr(13,2));
+
+  //On enlève les variables
+  urlGet = urlGet.substr(0,urlGet.find("?"));
+  urlGet = urlGet.substr(0,urlGet.find(";"));
 
   //On check si pas doc
   if(excluDoc)
@@ -118,7 +122,21 @@ void Graph::add (string ligne)
     {
       return;
     }
+    else if(urlGet.find(".doc") != -1)
+    {
+      return;
+    }
+    else if(urlGet.find(".docx") != -1) //utile ?
+    {
+      return;
+    }
+    else if(urlGet.find(".pdf") != -1) //utile ?
+    {
+      return;
+    }
   }
+
+  // Tri horaire
   if(heure != -1)
   {
     if(heureIntRequete != heure)
@@ -141,8 +159,6 @@ void Graph::add (string ligne)
     itPages->second.hits ++;
 
     majHighHit(itPages);
-
-
   }
 
   //Sinon on la crée
@@ -153,7 +169,7 @@ void Graph::add (string ligne)
     index.insert(make_pair(indicePage, urlGet));
     indexInv.insert(make_pair(urlGet, indicePage));
 
-    //majHighHit(itPages); AUSSI ICI
+    //majHighHit(itPages); //AUSSI ICI
 
 
     indicePage++;
@@ -161,20 +177,32 @@ void Graph::add (string ligne)
 }
 
 // On met à jour le tab par rapport au nouveau it (JE ME DEMANDE SI LA METHODE multimap inversée est pas plus simple)
+// OPTI !?
 void Graph::majHighHit(map<int,infosPage>::iterator & it)
 {
     //on cherche le hit mini
+
     map<int,infosPage>::iterator itMapPage;
     itMapPage = mapPages.find(tabIndiceMaxHits[TAILLE_TAB_HIGH_HIT-1]);
     int hitMini = itMapPage->second.hits;
 
+    //cout
+    map <int,string>::iterator itIndex;
+    itIndex = index.find(it->first);
+    cout << "majHighHit pour " << itIndex ->second << endl;
+    cout << "hitMini du tab = "  << hitMini <<endl;
 
+    // Si nbHits < hits mini du tableau
     if(it->second.hits < hitMini)
     {
+      cout << "hit de la page < hitMini" <<endl <<endl;
       return;
     }
     else
     {
+      // Tableau à l'envers : tab[9] plus petit hit tab[0] plus grand hit
+      // On cherche où l'insérer
+        cout << "boucle for" <<endl;
         for(vector<int>::iterator itTab = tabIndiceMaxHits.begin(); itTab != tabIndiceMaxHits.end(); itTab++)
         {
           itMapPage = mapPages.find(*itTab);
@@ -186,15 +214,21 @@ void Graph::majHighHit(map<int,infosPage>::iterator & it)
             if(dejaPresent != tabIndiceMaxHits.end())
             {
               //si oui on l'efface
-              tabIndiceMaxHits.erase(dejaPresent);
+              tabIndiceMaxHits.erase(dejaPresent); //multiple ?
               tabIndiceMaxHits.insert(itTab, it->first);
+              //cout << "déjà pres" <<endl;
+              cout << endl;
+
               return;
             }
-            else
+            else if (dejaPresent == tabIndiceMaxHits.end())
             {
+              //cout << "pas pres" << endl;
               //sinon on efface le dernier
               tabIndiceMaxHits.pop_back();
               tabIndiceMaxHits.insert(itTab, it->first);
+              cout << endl;
+
               return;
             }
           }
@@ -256,21 +290,28 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
   indicePage =0;
   excluDoc = eDoc;
   heure = h;
-  tabIndiceMaxHits = vector<int>(10);
+  tabIndiceMaxHits = vector<int>(10,0);
 
 
 	//Création du lecteur
 	lecteurLog monlecteurLog;
+
+
+  /*for(vector<int>::iterator itTab = tabIndiceMaxHits.begin(); itTab != tabIndiceMaxHits.end(); itTab++)
+  {
+    cout << *itTab <<endl;
+  }*/
+
 
 	monlecteurLog.read(nomLog, eDoc, h, this); // PLUTOT FAIRE CLASSES AMIES ?
 
 
   //Affichage tableau top hits
   affichageTopHits();
-  
+
   //Affichage de tout
   //affichageMapPages(mapPages);
-  affichage2(mapPages);
+  //affichage2(mapPages);
 
 
 

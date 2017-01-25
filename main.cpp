@@ -30,6 +30,8 @@ const unsigned int TAILLE_SUFFIX_G = SUFFIX_G.size();
 
 int main (int argc, char *argv[])
 {
+
+	// TRAITEMENT DE LA COMMANDE
 	if(argc > 7)
 	{
 		cerr << "Vous avez saisis trop d'arguments" << endl ;
@@ -43,11 +45,12 @@ int main (int argc, char *argv[])
 
 	for(int i = 1 ; i<argc-1; i++)
 	{
+		// -e
 		if(strcmp(argv[i],"-e") == 0)
 		{
 			excluDoc = true;
-			cout << "coucou";
 		}
+		//-g
 		else if(strcmp(argv[i],"-g") == 0)
 		{
 			i++;
@@ -58,6 +61,7 @@ int main (int argc, char *argv[])
 				return 1;
 			}
 		}
+		//-t
 		else if(strcmp(argv[i],"-t") == 0)
 		{
 			i++;
