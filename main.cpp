@@ -38,7 +38,7 @@ int main (int argc, char *argv[])
 		return 1;
 	}
 
-	string nomDot;
+	string nomDot = "false";
 	bool excluDoc = false;
 	int heure = -1;
 	string nomLog = argv[argc-1];

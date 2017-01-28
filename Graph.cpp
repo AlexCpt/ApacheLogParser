@@ -14,6 +14,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <fstream>
 
 using namespace std;
 //------------------------------------------------------ Include personnel
@@ -33,6 +34,8 @@ const string delimiteur = " ";
 //{
 //} //----- Fin de Méthode
 //affichage générique
+
+//PROBLEME SUR LES REF pas clean au niveau des variables
 
 template <typename M>
 void Graph::affichage2 (const M & m)
@@ -68,6 +71,7 @@ void Graph::affichageTopHits ()
 
 }
 
+// GERER QUAND FICHIER MOINS DE 10 ENTREES
 void Graph::add (string ligne)
 {
   //Découpage de la ligne : (pas générique)
@@ -318,7 +322,38 @@ void Graph::split (string ligne, vector<string> & ligneHach)
     }
 } //----- Fin de Méthode
 
+void Graph::createGraph()
+{
+    //Penser à prévenir ou vérifier que fichier existe etc...
 
+    ofstream fichier(nomDot, ios::out | ios::trunc);
+
+            if(fichier)
+            {
+
+                    fichier << "digraph {" << endl;
+                    //On parcourt mapPages pour les noeuds
+                    for(map<int, infosPage>::iterator itGraph = mapPages.begin(); itGraph != mapPages.end(); itGraph++)
+                    {
+                        map<int,string>::iterator itIndex = index.find(itGraph->first);
+                        fichier <<"node" << itGraph->first << " [label=\"" << itIndex->second << "\"];" << endl;
+
+                        for(map<int,int>::iterator itConnexion = itGraph->second.connexions.begin(); itConnexion != itGraph->second.connexions.end(); itConnexion++)
+                        {
+                          fichier << "node" << itGraph->first <<" -> node" << itConnexion->first <<" [label=\"" << itConnexion->second <<"\"];" <<endl;
+                        }
+
+                    }
+
+                    fichier << "}";
+                    fichier.close();
+            }
+            else
+                    cerr << "Impossible d'ouvrir le fichier !" << endl;
+
+
+
+}
 //------------------------------------------------- Surcharge d'opérateurs
 //~ Graph & Graph::operator = ( const Graph & unGraph )
 //~ // Algorithme :
@@ -343,14 +378,15 @@ void Graph::split (string ligne, vector<string> & ligneHach)
 	//~ cout << "Votre code a inserer ici ..." << endl;
 //~ } //----- Fin de Graph (constructeur de copie)
 
-
+//Pas sûr que tout mettre dans le constructeur très bonne idée (méthodes séparées ?)
 Graph::Graph (string nl, string nD, bool eDoc, int h)
 {
 #ifdef DEBUG
     cout << "Appel au constructeur de <Graph>" << endl;
 #endif
-	nomLog = nl;
 
+	nomLog = nl;
+  nomDot = nD;
   indicePage =0;
   excluDoc = eDoc;
   heure = h;
@@ -358,13 +394,6 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
 
 	//Création du lecteur
 	lecteurLog monlecteurLog;
-
-
-  /*for(vector<int>::iterator itTab = tabIndiceMaxHits.begin(); itTab != tabIndiceMaxHits.end(); itTab++)
-  {
-    cout << *itTab <<endl;
-  }*/
-
 
 	monlecteurLog.read(nomLog, eDoc, h, this); // PLUTOT FAIRE CLASSES AMIES ?
 
@@ -376,6 +405,11 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
   //Affichage de tout
   //affichageMapPages(mapPages);
   //affichage2(mapPages);
+
+  if(nomLog != "false")
+  {
+      createGraph();
+  }
 
 } //----- Fin de Graph
 

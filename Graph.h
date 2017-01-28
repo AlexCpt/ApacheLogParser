@@ -55,6 +55,9 @@ public:
 
 		void affichageTopHits ();
 
+		void createGraph();
+
+
 
 
 //------------------------------------------------- Surcharge d'opérateurs
@@ -72,7 +75,7 @@ public:
     //~ // Contrat :
     //~ //
 
-    Graph (string nl, string nD, bool eDoc, int h);
+		Graph (string nl, string nD, bool eDoc, int h);
     // Mode d'emploi :
     //
     // Contrat :
@@ -101,6 +104,7 @@ bool excluDoc;
 int heure;
 
 string nomLog;
+string nomDot;
 };
 
 //--------------------------- Autres définitions dépendantes de <Graph>
