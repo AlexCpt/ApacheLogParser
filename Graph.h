@@ -19,7 +19,7 @@
 struct infosPage
 {
 	int hits;
-	map<int, int> connexions; //code page, nombre hits sortants
+	map<int, int> connexions; //<code page visée, nombre hits sortants>
 
 	infosPage(int h=0):
 	hits(h){}
@@ -51,7 +51,7 @@ public:
 
 		void split (string ligne, vector<string> & ligneHach);
 
-		void majHighHit(map<int,infosPage>::iterator & it);
+		void createHighHit();
 
 		void affichageTopHits ();
 
@@ -90,10 +90,9 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-map <int, infosPage> mapPages;
+map <int, infosPage> mapPages; // Contient toutes les pages
 map <int, string> index;
 map <string, int> indexInv;
-multimap <int, int> mapHits; //<hits, indice>
 
 vector<int>  tabIndiceMaxHits; // Par ordre croissant (IDEE stocker nombre de hits aussi ?)
 

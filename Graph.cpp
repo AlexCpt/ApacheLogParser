@@ -51,7 +51,7 @@ void Graph::affichage2 (const M & m)
 
 void Graph::affichageTopHits ()
 {
-  cout << "Affichage Top 10 hits" <<endl;
+  cout << "Affichage Top 10 hits" <<endl << "-----------------------------" <<endl;
   for(vector<int>::iterator itTab = tabIndiceMaxHits.begin(); itTab != tabIndiceMaxHits.end(); itTab++)
   {
     map<int, string>::iterator itIndex;
@@ -76,12 +76,29 @@ void Graph::add (string ligne)
 
   //URL du GET
   string urlGet = ligneHach[6];
+  string urlRef = ligneHach[10];
   const string heureRequete = ligneHach[3];
+
   const int heureIntRequete = stoi(heureRequete.substr(13,2));
+
+  //On enlève les guillemets
+  urlRef.pop_back();
+  if(urlRef.size() > 0)
+  {
+    urlRef = urlRef.substr(1,urlRef.size()-1);
+  }
+  urlRef = urlRef.substr(0,urlGet.find("?"));
+  urlRef = urlRef.substr(0,urlGet.find(";"));
 
   //On enlève les variables
   urlGet = urlGet.substr(0,urlGet.find("?"));
   urlGet = urlGet.substr(0,urlGet.find(";"));
+
+  //On enlève le "/" si il est à la find
+  if(urlGet[urlGet.size()-1] == '/')
+  {
+    urlGet.pop_back();
+  }
 
   //On check si pas doc
   if(excluDoc)
@@ -95,6 +112,10 @@ void Graph::add (string ligne)
       return;
     }
     else if(urlGet.find(".tiff") != -1)
+    {
+      return;
+    }
+    else if(urlGet.find(".ics") != -1)
     {
       return;
     }
@@ -145,94 +166,137 @@ void Graph::add (string ligne)
     }
   }
 
-  //On check si la page existe
-  map <string,int>::iterator itIndexInv;
-  itIndexInv = indexInv.find(urlGet);// URL de la page GET
+  //GET : On check si la page existe
+  map <string,int>::iterator itIndexInvGet;
+  itIndexInvGet = indexInv.find(urlGet);// URL de la page GET
+
 
   //Si oui on augmente le nombre de hits
-  if(itIndexInv != indexInv.end())
+  if(itIndexInvGet != indexInv.end())
   {
     map <int,infosPage>::iterator itPages;
 
     //get le i qui correspond à l'url
-    itPages = mapPages.find(itIndexInv->second);
+    itPages = mapPages.find(itIndexInvGet->second);
     itPages->second.hits ++;
 
-    majHighHit(itPages);
   }
 
-  //Sinon on la crée
-  else if(itIndexInv == indexInv.end())
+  //GET : Sinon on la crée
+  else if(itIndexInvGet == indexInv.end())
   {
     infosPage monInfosPages(1);
     mapPages.insert(make_pair(indicePage, monInfosPages)); // ou insert({i, monInfosPages})
     index.insert(make_pair(indicePage, urlGet));
     indexInv.insert(make_pair(urlGet, indicePage));
-
-    //majHighHit(itPages); //AUSSI ICI
-
-
     indicePage++;
   }
+
+
+  //REF : si ref pas "-"
+ if(urlRef != "-")
+ {
+   //REF : On check si la page existe
+   map<string,int>::iterator itIndexInvRef= indexInv.find(urlRef);
+
+   //Si oui on vérifie que la connexion existe dans la page REF
+   if(itIndexInvRef != indexInv.end())
+   {
+     map<int,int>::iterator itConnexion;
+     map <int,infosPage>::iterator itPages;
+
+     itPages = mapPages.find(itIndexInvRef->second);
+
+     itConnexion = itPages->second.connexions.find(itIndexInvGet->second);
+
+     //Si existe on augmente les hits
+     if(itConnexion != itPages->second.connexions.end())
+     {
+         itConnexion->second++; // on augmente le hit
+     }
+     //Sinon on crée
+     else
+     {
+       itPages->second.connexions.insert(make_pair(itIndexInvGet->second, 1));
+     }
+   }
+
+   //REF : Sinon on la crée la page
+   else if(itIndexInvRef == indexInv.end())
+   {
+     infosPage monInfosPages(0); //hit = 0
+     mapPages.insert(make_pair(indicePage, monInfosPages)); // ou insert({i, monInfosPages})
+     index.insert(make_pair(indicePage, urlRef));
+     indexInv.insert(make_pair(urlRef, indicePage));
+
+
+     //REF et on crée la connexion
+     map <int,infosPage>::iterator itPages;
+     itPages = mapPages.find(indicePage); //i de Ref
+     itPages->second.connexions.insert(make_pair(itIndexInvGet->second, 1));
+
+      indicePage++;
+   }
+ }
 }
 
-// On met à jour le tab par rapport au nouveau it (JE ME DEMANDE SI LA METHODE multimap inversée est pas plus simple)
-// OPTI !?
-void Graph::majHighHit(map<int,infosPage>::iterator & it)
+
+void Graph::createHighHit() //Cas limite : TabVide
 {
-    //on cherche le hit mini
+    //On crée le vecteur
+   //tabIndiceMaxHits.resize(10);
 
-    map<int,infosPage>::iterator itMapPage;
-    itMapPage = mapPages.find(tabIndiceMaxHits[TAILLE_TAB_HIGH_HIT-1]);
-    int hitMini = itMapPage->second.hits;
+    //On rentre le premier
+    map<int, infosPage>::iterator itGraph = mapPages.begin();
+    map<int, infosPage>::iterator itComp;
 
-    //cout
-    map <int,string>::iterator itIndex;
-    itIndex = index.find(it->first);
-    cout << "majHighHit pour " << itIndex ->second << endl;
-    cout << "hitMini du tab = "  << hitMini <<endl;
+    tabIndiceMaxHits.push_back(itGraph->first);
+    itGraph++;
 
-    // Si nbHits < hits mini du tableau
-    if(it->second.hits < hitMini)
+    //On remplit avec les 9 suivants
+    int i=1;
+
+    for(; i<10; itGraph++)
     {
-      cout << "hit de la page < hitMini" <<endl <<endl;
-      return;
-    }
-    else
-    {
-      // Tableau à l'envers : tab[9] plus petit hit tab[0] plus grand hit
-      // On cherche où l'insérer
-        cout << "boucle for" <<endl;
-        for(vector<int>::iterator itTab = tabIndiceMaxHits.begin(); itTab != tabIndiceMaxHits.end(); itTab++)
+        vector<int>::iterator itVect;
+        for(itVect = tabIndiceMaxHits.begin(); itVect!= tabIndiceMaxHits.end(); itVect++)
         {
-          itMapPage = mapPages.find(*itTab);
-          if(it->second.hits > itMapPage->second.hits)
+          itComp = mapPages.find(*itVect);
+          if(itGraph->second.hits > itComp->second.hits)
           {
-            //on vérifie si indice pas déjà dedans
-            vector<int>::iterator dejaPresent = find(tabIndiceMaxHits.begin(), tabIndiceMaxHits.end(), it->first);
-
-            if(dejaPresent != tabIndiceMaxHits.end())
-            {
-              //si oui on l'efface
-              tabIndiceMaxHits.erase(dejaPresent); //multiple ?
-              tabIndiceMaxHits.insert(itTab, it->first);
-              //cout << "déjà pres" <<endl;
-              cout << endl;
-
-              return;
-            }
-            else if (dejaPresent == tabIndiceMaxHits.end())
-            {
-              //cout << "pas pres" << endl;
-              //sinon on efface le dernier
-              tabIndiceMaxHits.pop_back();
-              tabIndiceMaxHits.insert(itTab, it->first);
-              cout << endl;
-
-              return;
-            }
+            tabIndiceMaxHits.insert(itVect, itGraph->first);
+            break;
           }
+
         }
+        if (itVect == tabIndiceMaxHits.end())
+        {
+          tabIndiceMaxHits.push_back(itGraph->first);
+        }
+
+          i++;
+    }
+
+    //On passe à la 11ème page pour la suite
+    itGraph++;
+
+
+    //On reparcourt toute la map
+    for( ; itGraph != mapPages.end(); itGraph++)
+    {
+      vector<int>::iterator itVect;
+      for(itVect = tabIndiceMaxHits.begin(); itVect!= tabIndiceMaxHits.end(); itVect++)
+      {
+        itComp = mapPages.find(*itVect);
+        if(itGraph->second.hits > itComp->second.hits)
+        {
+          tabIndiceMaxHits.pop_back();
+          tabIndiceMaxHits.insert(itVect, itGraph->first);
+          break;
+        }
+
+      }
+
     }
 }
 
@@ -290,7 +354,6 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
   indicePage =0;
   excluDoc = eDoc;
   heure = h;
-  tabIndiceMaxHits = vector<int>(10,0);
 
 
 	//Création du lecteur
@@ -305,6 +368,7 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
 
 	monlecteurLog.read(nomLog, eDoc, h, this); // PLUTOT FAIRE CLASSES AMIES ?
 
+  createHighHit();
 
   //Affichage tableau top hits
   affichageTopHits();
@@ -313,18 +377,7 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
   //affichageMapPages(mapPages);
   //affichage2(mapPages);
 
-
-
-
-
-
 } //----- Fin de Graph
-
-
-
-
-
-
 
 
 Graph::~Graph ( )
