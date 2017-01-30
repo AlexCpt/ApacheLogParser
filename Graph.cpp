@@ -24,6 +24,8 @@ using namespace std;
 
 //------------------------------------------------------------- Constantes
 const string delimiteur = " ";
+const string URL_LOCALE = "http://intranet-if.insa-lyon.fr";
+
 #define TAILLE_TAB_HIGH_HIT 10
 //----------------------------------------------------------------- PUBLIC
 
@@ -36,6 +38,7 @@ const string delimiteur = " ";
 //affichage générique
 
 //PROBLEME SUR LES REF pas clean au niveau des variables
+//Resolu inshAllah
 
 template <typename M>
 void Graph::affichage2 (const M & m)
@@ -56,7 +59,7 @@ void Graph::affichageTopHits ()
 {
   cout << "Affichage Top 10 hits" <<endl << "-----------------------------" <<endl;
   for(vector<int>::iterator itTab = tabIndiceMaxHits.begin(); itTab != tabIndiceMaxHits.end(); itTab++)
-  {
+  {	  
     map<int, string>::iterator itIndex;
     itIndex = index.find(*itTab);
 
@@ -81,6 +84,7 @@ void Graph::add (string ligne)
   //URL du GET
   string urlGet = ligneHach[6];
   string urlRef = ligneHach[10];
+  
   const string heureRequete = ligneHach[3];
 
   const int heureIntRequete = stoi(heureRequete.substr(13,2));
@@ -90,9 +94,15 @@ void Graph::add (string ligne)
   if(urlRef.size() > 0)
   {
     urlRef = urlRef.substr(1,urlRef.size()-1);
+   
+    if (urlRef.find(URL_LOCALE)!= std::string::npos) 
+    {
+		urlRef=urlRef.substr(URL_LOCALE.size(),urlRef.size()); 
+	}
   }
-  urlRef = urlRef.substr(0,urlGet.find("?"));
-  urlRef = urlRef.substr(0,urlGet.find(";"));
+   //cout<<urlRef<<endl;
+  urlRef = urlRef.substr(0,urlRef.find("?"));
+  urlRef = urlRef.substr(0,urlRef.find(";"));
 
   //On enlève les variables
   urlGet = urlGet.substr(0,urlGet.find("?"));
@@ -102,6 +112,10 @@ void Graph::add (string ligne)
   if(urlGet[urlGet.size()-1] == '/')
   {
     urlGet.pop_back();
+  }
+  if(urlRef[urlRef.size()-1] == '/')
+  {
+    urlRef.pop_back();
   }
 
   //On check si pas doc
@@ -259,8 +273,18 @@ void Graph::createHighHit() //Cas limite : TabVide
 
     //On remplit avec les 9 suivants
     int i=1;
+    int maxTopHit=0;
+    
+    if(mapPages.size()>10)
+    {
+		maxTopHit=10;
+	}
+	else
+	{
+		maxTopHit=mapPages.size();
+	}
 
-    for(; i<10; itGraph++)
+    for(; i<maxTopHit; itGraph++)
     {
         vector<int>::iterator itVect;
         for(itVect = tabIndiceMaxHits.begin(); itVect!= tabIndiceMaxHits.end(); itVect++)
@@ -280,28 +304,30 @@ void Graph::createHighHit() //Cas limite : TabVide
 
           i++;
     }
+	if(mapPages.size()>10)
+	{
+		//On passe à la 11ème page pour la suite
+		itGraph++;
 
-    //On passe à la 11ème page pour la suite
-    itGraph++;
 
+		//On reparcourt toute la map
+		for( ; itGraph != mapPages.end(); itGraph++)
+		{
+		  vector<int>::iterator itVect;
+		  for(itVect = tabIndiceMaxHits.begin(); itVect!= tabIndiceMaxHits.end(); itVect++)
+		  {
+			itComp = mapPages.find(*itVect);
+			if(itGraph->second.hits > itComp->second.hits)
+			{
+			  tabIndiceMaxHits.pop_back();
+			  tabIndiceMaxHits.insert(itVect, itGraph->first);
+			  break;
+			}
 
-    //On reparcourt toute la map
-    for( ; itGraph != mapPages.end(); itGraph++)
-    {
-      vector<int>::iterator itVect;
-      for(itVect = tabIndiceMaxHits.begin(); itVect!= tabIndiceMaxHits.end(); itVect++)
-      {
-        itComp = mapPages.find(*itVect);
-        if(itGraph->second.hits > itComp->second.hits)
-        {
-          tabIndiceMaxHits.pop_back();
-          tabIndiceMaxHits.insert(itVect, itGraph->first);
-          break;
-        }
+		  }
 
-      }
-
-    }
+		}
+	}
 }
 
 void Graph::split (string ligne, vector<string> & ligneHach)
@@ -337,13 +363,19 @@ void Graph::createGraph()
                     {
                         map<int,string>::iterator itIndex = index.find(itGraph->first);
                         fichier <<"node" << itGraph->first << " [label=\"" << itIndex->second << "\"];" << endl;
-
-                        for(map<int,int>::iterator itConnexion = itGraph->second.connexions.begin(); itConnexion != itGraph->second.connexions.end(); itConnexion++)
+                    }
+                    
+                     for(map<int, infosPage>::iterator itGraph = mapPages.begin(); itGraph != mapPages.end(); itGraph++)
+                    {
+                        map<int,string>::iterator itIndex = index.find(itGraph->first);
+                       for(map<int,int>::iterator itConnexion = itGraph->second.connexions.begin(); itConnexion != itGraph->second.connexions.end(); itConnexion++)
                         {
                           fichier << "node" << itGraph->first <<" -> node" << itConnexion->first <<" [label=\"" << itConnexion->second <<"\"];" <<endl;
                         }
 
                     }
+                    
+                     
 
                     fichier << "}";
                     fichier.close();
@@ -395,21 +427,22 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
 	//Création du lecteur
 	lecteurLog monlecteurLog;
 
-	monlecteurLog.read(nomLog, eDoc, h, this); // PLUTOT FAIRE CLASSES AMIES ?
+	if(monlecteurLog.read(nomLog, eDoc, h, this) == 0)
+	{
+	  createHighHit();
 
-  createHighHit();
+	  //Affichage tableau top hits
+	  affichageTopHits();
 
-  //Affichage tableau top hits
-  affichageTopHits();
+	  //Affichage de tout
+	  //affichageMapPages(mapPages);
+	  //affichage2(mapPages);
 
-  //Affichage de tout
-  //affichageMapPages(mapPages);
-  //affichage2(mapPages);
-
-  if(nomLog != "false")
-  {
-      createGraph();
-  }
+	  if(nomLog != "false")
+	  {
+		  createGraph();
+	  }
+	}
 
 } //----- Fin de Graph
 

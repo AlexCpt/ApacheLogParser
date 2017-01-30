@@ -52,7 +52,7 @@ public:
     //~ // Contrat :
     //~ //
 
-		void read (string nl, bool eDoc, int h, Graph * monGraph);
+		int read (string nl, bool eDoc, int h, Graph * monGraph);
 
 
 

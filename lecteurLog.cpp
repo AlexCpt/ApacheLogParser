@@ -14,7 +14,7 @@
 #include <fstream>
 #include <map>
 #include <vector>
-#include <Algorithm> // pour affichage3
+#include <algorithm> // pour affichage3
 using namespace std;
 //------------------------------------------------------ Include personnel
 #include "lecteurLog.h"
@@ -25,7 +25,7 @@ using namespace std;
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
- void lecteurLog::read (string nl, bool eDoc, int h, Graph * monGraph)
+ int lecteurLog::read (string nl, bool eDoc, int h, Graph * monGraph)
 // Algorithme :
 {
 	nomLog = nl;
@@ -33,18 +33,33 @@ using namespace std;
 
 	ifstream fichier(nomLog.c_str(), ios::in);
 
+
 	 if (fichier)
 	 {
-		 // ON LIT ET ON COUPE EN MORCEAUX
-		 while(getline(fichier, ligneFichier))
+		 fichier.seekg(0, ios::end);  
+		 if(fichier.tellg() == 0) // On check fichier vide
 		 {
-        monGraph->add(ligneFichier);
+			cerr<<"Erreur : Fichier vide"<<endl;
+			return -1;
+		 }
+		 else
+		 {
+			 fichier.seekg(0, ios::beg);
+			 
+			 // ON LIT ET ON COUPE EN MORCEAUX
+			 while(getline(fichier, ligneFichier))
+			 { 	
+				monGraph->add(ligneFichier);
+			 }
+			 
+			 return 0;
 		 }
 	 }
 
 	 else
 	 {
 		 cerr << "Erreur à l'ouverture du fichier"<<endl;
+		 return -1;
 	 }
 
 } //----- Fin de Méthode
