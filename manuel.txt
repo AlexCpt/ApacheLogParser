@@ -9,7 +9,7 @@ SYNOPSIS
 DESCRIPTION
 
 	A l'invocation de ./analog, si l'extension du fichier est en .log,
-	l'application procède à la lecture et à l'analyse des requètes contenues
+	l'application procède à la lecture et à l'analyse des requêtes contenues
 	dans le fichier. Il établit ainsi la liste des 10 sites les plus visités
 	dans l'historique.
 
@@ -32,12 +32,9 @@ options de filtrage :
 autres :
 	[-g fichier.dot] generation du fichier  GraphViz
 
-		Cette option genère dans le fichier.dot le code GraphViz 
+		Cette option génère dans le fichier.dot le code GraphViz 
 		correspondant au log analysé. Chaque noeud étant une page 
-		et chaque arc indique le nombre de connexion sortantes.
-
-
-		a
+		et chaque arc indique le nombre de connexions sortantes.
 	
 
 	
