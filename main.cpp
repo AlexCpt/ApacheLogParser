@@ -12,6 +12,7 @@
 //-------------------------------------------------------- Include système
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <vector>
 #include <sstream>
 using namespace std;
@@ -36,7 +37,7 @@ int main (int argc, char *argv[])
 	}
 	if(argc < 2)
 	{
-		cerr << "Vous n'avez pas saisis asez d'arguments" << endl ;
+		cerr << "Vous n'avez pas saisis assez d'arguments" << endl ;
 		cerr << "Utilisation minimale de la commande : analog xxx.log" <<endl;
 		return 1;
 	}

@@ -18,7 +18,8 @@
 //------------------------------------------------------------------------
 // Role de la classe <lecteurLog>
 //
-//
+//Classe assurant la lecture d'un fichier. Elle stocke le nom du fichier en
+//paramètre. 
 //------------------------------------------------------------------------
 
 class lecteurLog
@@ -27,19 +28,18 @@ class lecteurLog
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-		int read (string nl, bool eDoc, int h, Graph * monGraph);
+  
+	int read (const string nl, Graph * monGraph);
+	// Mode d'emploi :
+    // string nl est le nom du fichier à lire. 
+    // monGraph est un pointeur sur le Graph appellant le lecteur. 
+    // La classe tente d'ouvrir le fichier et ajoute les pages au Graph 
+    // Renvoie : 0 si l'execution c'est bien déroulée. 
+    //			 -1 en cas d'echec.
 
     lecteurLog ();
     // Mode d'emploi :
-    //
-    // Contrat :
-    //
+    // Surcharge du constructeur par défaut,initialise string à undefined
 
     virtual ~lecteurLog ( );
     // Mode d'emploi :

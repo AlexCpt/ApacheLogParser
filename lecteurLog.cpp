@@ -16,13 +16,14 @@ using namespace std;
 //------------------------------------------------------ Include personnel
 #include "lecteurLog.h"
 //------------------------------------------------------------- Constantes
+const string NOMDEFAUT="undefined";
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
- int lecteurLog::read (string nl, bool eDoc, int h, Graph * monGraph)
+ int lecteurLog::read (const string nomFichier, Graph * monGraph)
 // Algorithme :
 {
-	nomLog = nl;
+	nomLog = nomFichier;
 	string ligneFichier;
 
 	ifstream fichier(nomLog.c_str(), ios::in);
@@ -30,7 +31,7 @@ using namespace std;
 	 if (fichier)
 	 {
 		 fichier.seekg(0, ios::end);
-		 if(fichier.tellg() == 0) // On check fichier vide
+		 if(fichier.tellg() == 0) // On check si le fichier est vide
 		 {
 			cerr<<"Erreur : Fichier vide"<<endl;
 			return -1;
@@ -58,16 +59,16 @@ using namespace std;
 } //----- Fin de Méthode
 
 lecteurLog::lecteurLog ()
-// Algorithme :
-//
 {
 #ifdef DEBUG
     cout << "Appel au constructeur de <lecteurLog>" << endl;
 #endif
+
+	nomLog=NOMDEFAUT;
 } //----- Fin de lecteurLog
 
 
-lecteurLog::~lecteurLog ( )
+lecteurLog::~lecteurLog ()
 // Algorithme :
 //
 {
