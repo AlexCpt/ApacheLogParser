@@ -1,0 +1,43 @@
+./analog 			User Commands
+
+NAME
+	./analog analyseur de fichier.log
+
+SYNOPSIS
+	./analog [-g outfile.dot] [-t heure][-e]
+
+DESCRIPTION
+
+	A l'invocation de ./analog, si l'extension du fichier est en .log,
+	l'application procède à la lecture et à l'analyse des requètes contenues
+	dans le fichier. Il établit ainsi la liste des 10 sites les plus visités
+	dans l'historique.
+
+	La totalité des options peuvent se cumuler.
+
+OPTIONS
+
+options de filtrage :
+
+	[-e] filtre contenu
+		
+		Cette option filtre les requêtes visant les ressources en 
+		{.jpg .jpeg .tiff .ics .gif .png .bmp .ico .css .js .doc 
+		 .docx .pdf }
+
+	[-t heure] filtre horaire
+		
+		Cette option filtre les requêtes dont l'heure n'est pas comprise
+		dans l'intervalle [heure,heure +1[
+autres :
+	[-g fichier.dot] generation du fichier  GraphViz
+
+		Cette option genère dans le fichier.dot le code GraphViz 
+		correspondant au log analysé. Chaque noeud étant une page 
+		et chaque arc indique le nombre de connexion sortantes.
+
+
+		a
+	
+
+	
