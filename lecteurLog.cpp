@@ -16,7 +16,6 @@ using namespace std;
 //------------------------------------------------------ Include personnel
 #include "lecteurLog.h"
 //------------------------------------------------------------- Constantes
-const string NOMDEFAUT="undefined";
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
@@ -63,8 +62,6 @@ lecteurLog::lecteurLog ()
 #ifdef DEBUG
     cout << "Appel au constructeur de <lecteurLog>" << endl;
 #endif
-
-	nomLog=NOMDEFAUT;
 } //----- Fin de lecteurLog
 
 

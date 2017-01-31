@@ -18,8 +18,8 @@
 //------------------------------------------------------------------------
 // Role de la classe <lecteurLog>
 //
-//Classe assurant la lecture d'un fichier. Elle stocke le nom du fichier en
-//paramètre. 
+//Classe réutilisable assurant la lecture d'un fichier. Elle stocke le nom du fichier en
+//paramètre.
 //------------------------------------------------------------------------
 
 class lecteurLog
@@ -28,24 +28,22 @@ class lecteurLog
 
 public:
 //----------------------------------------------------- Méthodes publiques
-  
+
 	int read (const string nl, Graph * monGraph);
 	// Mode d'emploi :
-    // string nl est le nom du fichier à lire. 
-    // monGraph est un pointeur sur le Graph appellant le lecteur. 
-    // La classe tente d'ouvrir le fichier et ajoute les pages au Graph 
-    // Renvoie : 0 si l'execution c'est bien déroulée. 
+    // string nl est le nom du fichier à lire.
+    // monGraph est un pointeur sur le Graph appellant le lecteur.
+    // La classe tente d'ouvrir le fichier et ajoute les pages au Graph (fonction add)
+    // Renvoie : 0 si l'execution s'est bien déroulée.
     //			 -1 en cas d'echec.
 
     lecteurLog ();
     // Mode d'emploi :
-    // Surcharge du constructeur par défaut,initialise string à undefined
+    // Constructeur de l'objet (vide)
 
     virtual ~lecteurLog ( );
     // Mode d'emploi :
-    //
-    // Contrat :
-    //
+    // Destructeur de l'objet (vide)
 
 //------------------------------------------------------------------ PRIVE
 

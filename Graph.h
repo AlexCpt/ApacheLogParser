@@ -23,10 +23,11 @@ struct infosPage
 	infosPage(int h=0):
 	hits(h){}
 };
+
 //------------------------------------------------------------------------
 // Role de la classe <Graph>
-// Graph stock la totatité des pages, leur nombre de hit, ainsi que le nombre
-// de fois ou une page atteinte depuis cette page.
+// Graph stock la totatité des pages, leur nombre de hit, ainsi que les
+// connexions sortantes que celle-ci possède avec d'autres pages.
 //
 //------------------------------------------------------------------------
 
@@ -39,52 +40,51 @@ public:
 
 	void add (const string ligne);
 	// Mode d'emploi :
-	// ligne est la string contenant les informations de la requette
-	// pour mettre  à jour mapPages.
-	// Met à jour l'index,l'index inv si les pages n'existent pas encore
+	// ligne est la string contenant les informations brutes provenant du log
+	// add la parse et mets à jour mapPages (nombre de hits et connexions).
+	// add met aussi à jour l'index et l'index inv si les pages n'existent pas encore
 	// dans mapPage.
-	// Met à jour le nombre de hit et les connexions.
 	// Fait le tri sur les extensions si excluDoc est levé.
-	// Fait le tri sur les heures si heure est different de -1.
+	// Fait le tri sur les heures si heure est différent de -1.
 
 	void split (const string ligne, vector<string> & ligneHach);
 	// Mode d'emploi :
-	// Decompose la string entree en paramètre en fragment stockes dans 
+	// Décompose la string ligne entrée en paramètre en fragments stockes dans
 	// le vector de string ligneHach. Un fragment est créé à chaque
 	// fois que la string DELIMITEUR est trouvée dans line (DELIMITEUR
 	// n'est pas ajouté au fragment)
-	
+
 	void createHighHit();
 	// Mode d'emploi :
-	// Places les 10 index faisant references au pages possedant le plus 
+	// Place les 10 indices faisant references aux pages de mapPages possedant le plus
 	// grand nombres de hits dans le vector tabIndiceMaxHits.
-	
+
 	void affichageTopHits ();
 	// Mode d'emploi :
 	//	Affiche le tableau tabIndiceMaxHits
-	
+
 	void createDot();
 	// Mode d'emploi :
-	// Genere le code source graphViz correspondant au fichier (nomLog) 
+	// Genere le code source graphViz correspondant au fichier (nomLog)
 	// analysé. Le code est écrit dans le fichier nomDot.
-	
+
 
 	Graph (string nl, string nD, bool eDoc, int h);
 	// Mode d'emploi :
     // Recquiert un nom de fichier Log
-    // Entraine la creation et l'affichage des pages correspondants au
+    // Entraine la creation et l'affichage des pages correspondant au
     // tabIndiceMaxHits.
     // Si nD est different de sa valeur "false", un .dot est
-    // genere a ce nom
+    // genere à ce nom
     // Si le eDoc est vrai, les extentions de type image, css ou javascript
     // sont ignorées.
-    // Si h est different de -1, seules les requetes entre h et h+1 sont 
-    // traitée.
+    // Si h est different de -1, seules les requetes entre h et h+1 sont
+    // traitées.
 
     virtual ~Graph ( );
 	// Mode d'emploi :
     // Destructeur vide.
-    
+
 
 //------------------------------------------------------------------ PRIVE
 
