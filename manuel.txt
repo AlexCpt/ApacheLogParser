@@ -4,7 +4,7 @@ NAME
 	./analog analyseur de fichier.log
 
 SYNOPSIS
-	./analog [-g outfile.dot] [-t heure][-e]
+	./analog [-g outfile.dot] [-t heure][-e] infile.log
 
 DESCRIPTION
 
