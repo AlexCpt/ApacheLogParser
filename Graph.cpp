@@ -44,7 +44,7 @@ void Graph::affichageTopHits()
 
 void Graph::add (const string ligne)
 {
-	vector<string> ligneHach;    // Pas forcément vector??????
+	vector<string> ligneHach; 
 	split(ligne, ligneHach);
 
 	//URL du GET
