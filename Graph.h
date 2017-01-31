@@ -39,28 +39,28 @@ public:
 
 	void add (const string ligne);
 	// Mode d'emploi :
-	// ligne est la string contenant les informations de la requette 
-	// pour mettre  à jour mapPages. 
+	// ligne est la string contenant les informations de la requette
+	// pour mettre  à jour mapPages.
 	// Met à jour l'index,l'index inv si les pages n'existent pas encore
 	// dans mapPage.
 	// Met à jour le nombre de hit et les connexions.
 	// Fait le tri sur les extensions si excluDoc est levé.
 	// Fait le tri sur les heures si heure est different de -1.
-	
+
 	void split (const string ligne, vector<string> & ligneHach);
 	// Mode d'emploi :
 	//
-	
+
 	void createHighHit();
 	// Mode d'emploi :
 	//
-	
+
 	void affichageTopHits ();
 	// Mode d'emploi :
 	//
 	// Contrat :
 	//
-	void createGraph();
+	void createDot();
 	// Mode d'emploi :
 	//
 	// Contrat :

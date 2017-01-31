@@ -143,15 +143,15 @@ void Graph::add (const string ligne)
 		{
 			return;
 		}
-		else if(urlGet.find(".docx") != std::string::npos) //utile ?
+		else if(urlGet.find(".docx") != std::string::npos)
 		{
 			return;
 		}
-		else if(urlGet.find(".pdf") != std::string::npos) //utile ?
+		else if(urlGet.find(".pdf") != std::string::npos)
 		{
 			return;
 		}
-    else if(urlGet.find(".txt") != std::string::npos) //utile ?
+    else if(urlGet.find(".txt") != std::string::npos)
 		{
 			return;
 		}
@@ -327,7 +327,7 @@ void Graph::split (const string ligne, vector<string> & ligneHach)
     }
 } //----- Fin de Méthode
 
-void Graph::createGraph()
+void Graph::createDot()
 {
     ofstream fichier(nomDot, ios::out | ios::trunc);
 
@@ -359,7 +359,6 @@ void Graph::createGraph()
             }
 }
 
-//Pas sûr que tout mettre dans le constructeur très bonne idée (méthodes séparées ?)
 Graph::Graph (string nl, string nD, bool eDoc, int h)
 {
 #ifdef DEBUG
@@ -384,7 +383,7 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
 
 	  if(nomDot != "false")
 	  {
-		  createGraph();
+		  createDot();
 	  }
 	}
 
