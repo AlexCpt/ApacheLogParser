@@ -95,7 +95,7 @@ protected:
 map <int, infosPage> mapPages; // Contient toutes les pages
 map <int, string> index;
 map <string, int> indexInv;
-vector<int>  tabIndiceMaxHits; // Par ordre croissant
+vector<int>  tabIndiceMaxHits;
 int indicePage;
 bool excluDoc;
 int heure;
