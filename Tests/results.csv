@@ -1,6 +1,12 @@
 Test ID;Return code validation;Out result;StdErr result;File creation result;Global result
 Test1;1;2;1;2;1
 Test10;1;2;1;2;1
+Test11;1;1;2;2;1
+Test12;1;1;2;2;1
+Test13;1;1;2;2;1
+Test14;1;1;2;2;1
+Test15;2;2;1;2;1
+Test16;1;1;2;2;1
 Test2;2;2;1;2;1
 Test3;2;2;1;2;1
 Test4;2;2;1;2;1
