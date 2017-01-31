@@ -6,7 +6,7 @@
 *************************************************************************/
 
 //---------- Interface de la classe <lecteurLog> (fichier lecteurLog.h) ------
-#if ! defined (lecteurLog_H )
+#if ! defined ( lecteurLog_H )
 #define lecteurLog_H
 
 
@@ -43,8 +43,9 @@ public:
 
     virtual ~lecteurLog ( );
     // Mode d'emploi :
-    // Destructeur vide
-
+    //
+    // Contrat :
+    //
 
 //------------------------------------------------------------------ PRIVE
 

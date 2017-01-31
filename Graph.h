@@ -26,8 +26,7 @@ struct infosPage
 };
 //------------------------------------------------------------------------
 // Role de la classe <Graph>
-// Graph stock la totatité des pages, leur nombre de hit, ainsi que le nombre
-// de fois ou une page atteinte depuis cette page.
+// Graph cr
 //
 //------------------------------------------------------------------------
 
@@ -50,43 +49,34 @@ public:
 	
 	void split (const string ligne, vector<string> & ligneHach);
 	// Mode d'emploi :
-	// Decompose la string entree en paramètre en fragment stockes dans 
-	// le vector de string ligneHach. Un fragment est créé à chaque
-	// fois que la string DELIMITEUR est trouvée dans line (DELIMITEUR
-	// n'est pas ajouté au fragment)
+	//
 	
 	void createHighHit();
 	// Mode d'emploi :
-	// Places les 10 index faisant references au pages possedant le plus 
-	// grand nombres de hits dans le vector tabIndiceMaxHits.
+	//
 	
 	void affichageTopHits ();
 	// Mode d'emploi :
-	//	Affiche le tableau tabIndiceMaxHits
-	
-	void createDot();
+	//
+	// Contrat :
+	//
+	void createGraph();
 	// Mode d'emploi :
-	// Genere le code source graphViz correspondant au fichier (nomLog) 
-	// analysé. Le code est écrit dans le fichier nomDot.
-	
+	//
+	// Contrat :
+	//
 
 	Graph (string nl, string nD, bool eDoc, int h);
     // Mode d'emploi :
-    // Recquiert un nom de fichier Log
-    // Entraine la creation et l'affichage des pages correspondants au
-    // tabIndiceMaxHits.
-    // Si nD est different de sa valeur "false", un .dot est
-    // genere a ce nom
-    // Si le eDoc est vrai, les extentions de type image, css ou javascript
-    // sont ignorées.
-    // Si h est different de -1, seules les requetes entre h et h+1 sont 
-    // traitée.
-    
+    //
+    // Contrat :
+    //
 
     virtual ~Graph ( );
     // Mode d'emploi :
-    // Destructeur vide.
-    
+    //
+    // Contrat :
+    //
 
 //------------------------------------------------------------------ PRIVE
 
@@ -98,7 +88,7 @@ map <int, infosPage> mapPages; // Contient toutes les pages
 map <int, string> index;
 map <string, int> indexInv;
 
-vector<int>  tabIndiceMaxHits; // Par ordre croissant
+vector<int>  tabIndiceMaxHits; // Par ordre croissant (IDEE stocker nombre de hits aussi ?)
 
 int indicePage;
 bool excluDoc;

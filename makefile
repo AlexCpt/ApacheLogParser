@@ -25,3 +25,7 @@ main.o : main.cpp
 lecteurLog.o : lecteurLog.cpp lecteurLog.h
 
 Graph.o : Graph.cpp Graph.h
+
+.PHONY : test
+test:
+	cd Tests && ./mktest.sh
