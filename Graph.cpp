@@ -365,7 +365,7 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
 	  //Affichage tableau top hits
 	  affichageTopHits();
 
-	  if(nomLog != "false")
+	  if(nomDot != "false")
 	  {
 		  createGraph();
 	  }
