@@ -12,10 +12,7 @@
 
 //--------------------------------------------------- Interfaces utilisées
 #include "Graph.h"
-#include <vector>
-
 //------------------------------------------------------------- Constantes
-const string SEP = " ";
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
@@ -36,27 +33,7 @@ public:
     // Contrat :
     //
 
-
-//------------------------------------------------- Surcharge d'opérateurs
-    //~ lecteurLog & operator = ( const lecteurLog & unlecteurLog );
-    //~ // Mode d'emploi :
-    //~ //
-    //~ // Contrat :
-    //~ //
-
-
-//-------------------------------------------- Constructeurs - destructeur
-    //~ lecteurLog ( const lecteurLog & unlecteurLog );
-    //~ // Mode d'emploi (constructeur de copie) :
-    //~ //
-    //~ // Contrat :
-    //~ //
-
 		int read (string nl, bool eDoc, int h, Graph * monGraph);
-
-
-
-
 
     lecteurLog ();
     // Mode d'emploi :

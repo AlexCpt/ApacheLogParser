@@ -12,15 +12,9 @@
 //-------------------------------------------------------- Include système
 #include <iostream>
 #include <fstream>
-#include <map>
-#include <vector>
-#include <algorithm> // pour affichage3
 using namespace std;
 //------------------------------------------------------ Include personnel
 #include "lecteurLog.h"
-#include "Graph.h"
-#include "ligne.h"
-
 //------------------------------------------------------------- Constantes
 //----------------------------------------------------------------- PUBLIC
 
@@ -33,10 +27,9 @@ using namespace std;
 
 	ifstream fichier(nomLog.c_str(), ios::in);
 
-
 	 if (fichier)
 	 {
-		 fichier.seekg(0, ios::end);  
+		 fichier.seekg(0, ios::end);
 		 if(fichier.tellg() == 0) // On check fichier vide
 		 {
 			cerr<<"Erreur : Fichier vide"<<endl;
@@ -45,13 +38,13 @@ using namespace std;
 		 else
 		 {
 			 fichier.seekg(0, ios::beg);
-			 
+
 			 // ON LIT ET ON COUPE EN MORCEAUX
 			 while(getline(fichier, ligneFichier))
-			 { 	
+			 {
 				monGraph->add(ligneFichier);
 			 }
-			 
+
 			 return 0;
 		 }
 	 }
@@ -64,35 +57,6 @@ using namespace std;
 
 } //----- Fin de Méthode
 
-
-//~
-//~ //------------------------------------------------- Surcharge d'opérateurs
-//~ lecteurLog & lecteurLog::operator = ( const lecteurLog & unlecteurLog )
-//~ // Algorithme :
-//~ //
-//~ {
-//~ #ifdef DEBUG
-    //~ cout << "Appel a la surcharge de l operateur d affectation de <lecteurLog>" << endl;
-//~ #endif
-	//~ cout << "Votre code a inserer ici ..." << endl;
-	//~ return *this;
-//~ } //----- Fin de operator =
-
-
-//-------------------------------------------- Constructeurs - destructeur
-//~ lecteurLog::lecteurLog ( const lecteurLog & unlecteurLog )
-//~ // Algorithme :
-//~ //
-//~ {
-//~ #ifdef DEBUG
-    //~ cout << "Appel au constructeur de copie de <lecteurLog>" << endl;
-//~ #endif
-	//~ cout << "Votre code a inserer ici ..." << endl;
-//~ } //----- Fin de lecteurLog (constructeur de copie)
-
-
-
-
 lecteurLog::lecteurLog ()
 // Algorithme :
 //
@@ -100,9 +64,6 @@ lecteurLog::lecteurLog ()
 #ifdef DEBUG
     cout << "Appel au constructeur de <lecteurLog>" << endl;
 #endif
-
-
-
 } //----- Fin de lecteurLog
 
 

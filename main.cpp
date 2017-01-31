@@ -13,20 +13,16 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "string.h"
 #include <sstream>
 using namespace std;
 //------------------------------------------------------ Include personnel
 #include "Graph.h"
 //------------------------------------------------------------- Constantes
 
-
 const string SUFFIX = ".log";
 const string SUFFIX_G = ".dot";
 const unsigned int TAILLE_SUFFIX = SUFFIX.size();
 const unsigned int TAILLE_SUFFIX_G = SUFFIX_G.size();
-
-
 
 int main (int argc, char *argv[])
 {
@@ -35,6 +31,13 @@ int main (int argc, char *argv[])
 	if(argc > 7)
 	{
 		cerr << "Vous avez saisis trop d'arguments" << endl ;
+		cerr << "Utilisation minimale de la commande : analog xxx.log" <<endl;
+		return 1;
+	}
+	if(argc < 2)
+	{
+		cerr << "Vous n'avez pas saisis asez d'arguments" << endl ;
+		cerr << "Utilisation minimale de la commande : analog xxx.log" <<endl;
 		return 1;
 	}
 
@@ -58,6 +61,7 @@ int main (int argc, char *argv[])
 			if(nomDot.compare(nomDot.size() - TAILLE_SUFFIX_G, TAILLE_SUFFIX_G, SUFFIX_G) != 0 && nomDot.size() >= TAILLE_SUFFIX_G)
 			{
 				cerr << "argument différent de .dot" << endl;
+				cerr << "Utilisation minimale de la commande : analog xxx.log" <<endl;
 				return 1;
 			}
 		}
@@ -68,35 +72,46 @@ int main (int argc, char *argv[])
 
 			string stringHeure = argv[i];
 
-			stringstream(stringHeure) >> heure; //proteger du non int
+			if(isdigit(stringHeure[0]))
+			{
+				stringstream(stringHeure) >> heure; //proteger du non int
 
-			if(heure < 0)
-			{
-				cerr << "heure négative invalide" << endl;
+				if(heure < 0)
+				{
+					cerr << "heure négative invalide" << endl;
+					return 1;
+				}
+				if (heure > 24)
+				{
+					cerr << "heure supérieure à 24 invalide" << endl;
+					return 1;
+				}
 			}
-			if (heure > 24)
+			//Heure incorrecte
+			else
 			{
-				cerr << "heure supérieure à 24 invalide" << endl;
+				cerr << "heure négative non numérique" << endl;
+				return 1;
 			}
 		}
+		else
+		{
+			cerr << "Mauvais arguments" << endl ;
+			cerr << "Utilisation minimale de la commande : analog xxx.log" <<endl;
+		}
 	}
-
-
-
 
 	//on vérifie que .log valide
 	if(nomLog.compare(nomLog.size() - TAILLE_SUFFIX, TAILLE_SUFFIX, SUFFIX) != 0 && nomLog.size() >= TAILLE_SUFFIX)
 	{
 		cerr << "argument différent de .log" << endl;
+		cerr << "Utilisation minimale de la commande : analog xxx.log" <<endl;
+
 		return 1;
 	}
 
-
-
 	//Création du graph
 	Graph monGraph(nomLog, nomDot, excluDoc, heure);
-
-
 
 	return 0;
 }

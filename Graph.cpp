@@ -11,11 +11,8 @@
 
 //-------------------------------------------------------- Include système
 #include <iostream>
-#include <map>
-#include <vector>
 #include <string>
 #include <fstream>
-
 using namespace std;
 //------------------------------------------------------ Include personnel
 #include "Graph.h"
