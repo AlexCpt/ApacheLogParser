@@ -58,7 +58,7 @@ int main (int argc, char *argv[])
 		{
 			i++;
 			nomDot = argv[i];
-			if(nomDot.compare(nomDot.size() - TAILLE_SUFFIX_G, TAILLE_SUFFIX_G, SUFFIX_G) != 0 && nomDot.size() >= TAILLE_SUFFIX_G)
+			if(nomDot.size() <= TAILLE_SUFFIX_G || nomDot.compare(nomDot.size() - TAILLE_SUFFIX_G, TAILLE_SUFFIX_G, SUFFIX_G) != 0)
 			{
 				cerr << "argument différent de .dot" << endl;
 				cerr << "Utilisation minimale de la commande : analog xxx.log" <<endl;
@@ -76,21 +76,16 @@ int main (int argc, char *argv[])
 			{
 				stringstream(stringHeure) >> heure; //proteger du non int
 
-				if(heure < 0)
+				if (heure > 23)
 				{
-					cerr << "heure négative invalide" << endl;
-					return 1;
-				}
-				if (heure > 24)
-				{
-					cerr << "heure supérieure à 24 invalide" << endl;
+					cerr << "heure supérieure à 23h invalide" << endl;
 					return 1;
 				}
 			}
 			//Heure incorrecte
 			else
 			{
-				cerr << "heure négative non numérique" << endl;
+				cerr << "heure non numérique ou négative" << endl;
 				return 1;
 			}
 		}
@@ -98,15 +93,15 @@ int main (int argc, char *argv[])
 		{
 			cerr << "Mauvais arguments" << endl ;
 			cerr << "Utilisation minimale de la commande : analog xxx.log" <<endl;
+			return 1;
 		}
 	}
 
 	//on vérifie que .log valide
-	if(nomLog.compare(nomLog.size() - TAILLE_SUFFIX, TAILLE_SUFFIX, SUFFIX) != 0 && nomLog.size() >= TAILLE_SUFFIX)
+	if(nomLog.size() <= TAILLE_SUFFIX || nomLog.compare(nomLog.size() - TAILLE_SUFFIX, TAILLE_SUFFIX, SUFFIX) != 0)
 	{
 		cerr << "argument différent de .log" << endl;
 		cerr << "Utilisation minimale de la commande : analog xxx.log" <<endl;
-
 		return 1;
 	}
 
