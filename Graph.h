@@ -47,9 +47,9 @@ public:
 		template <typename M>
 		void affichage2 (const M & m);
 
-		void add (string ligne);
+		void add (const string ligne);
 
-		void split (string ligne, vector<string> & ligneHach);
+		void split (const string ligne, vector<string> & ligneHach);
 
 		void createHighHit();
 
@@ -57,23 +57,6 @@ public:
 
 		void createGraph();
 
-
-
-
-//------------------------------------------------- Surcharge d'opérateurs
-    //~ Graph & operator = ( const Graph & unGraph );
-    //~ // Mode d'emploi :
-    //~ //
-    //~ // Contrat :
-    //~ //
-//~
-
-//-------------------------------------------- Constructeurs - destructeur
-    //~ Graph ( const Graph & unGraph );
-    //~ // Mode d'emploi (constructeur de copie) :
-    //~ //
-    //~ // Contrat :
-    //~ //
 
 		Graph (string nl, string nD, bool eDoc, int h);
     // Mode d'emploi :
@@ -109,4 +92,4 @@ string nomDot;
 
 //--------------------------- Autres définitions dépendantes de <Graph>
 
-#endif // ${include_guard_symbol}
+#endif 

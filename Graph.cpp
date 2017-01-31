@@ -20,13 +20,9 @@ using namespace std;
 //------------------------------------------------------ Include personnel
 #include "Graph.h"
 #include "lecteurLog.h"
-
-
 //------------------------------------------------------------- Constantes
 const string delimiteur = " ";
 const string URL_LOCALE = "http://intranet-if.insa-lyon.fr";
-
-#define TAILLE_TAB_HIGH_HIT 10
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
@@ -37,13 +33,10 @@ const string URL_LOCALE = "http://intranet-if.insa-lyon.fr";
 //} //----- Fin de Méthode
 //affichage générique
 
-//PROBLEME SUR LES REF pas clean au niveau des variables
-//Resolu inshAllah
-
 template <typename M>
 void Graph::affichage2 (const M & m)
 {
-  for (typename M::const_iterator it = m.cbegin() ; it!= m.cend(); it++)
+  for (typename M::const_iterator it = m.cbegin(); it!= m.cend(); it++)
   {
     map<int, string>::iterator itIndex;
     itIndex = index.find(it->first);
@@ -55,11 +48,11 @@ void Graph::affichage2 (const M & m)
   cout << endl;
 }
 
-void Graph::affichageTopHits ()
+void Graph::affichageTopHits()
 {
   cout << "Affichage Top 10 hits" <<endl << "-----------------------------" <<endl;
   for(vector<int>::iterator itTab = tabIndiceMaxHits.begin(); itTab != tabIndiceMaxHits.end(); itTab++)
-  {	  
+  {
     map<int, string>::iterator itIndex;
     itIndex = index.find(*itTab);
 
@@ -74,33 +67,33 @@ void Graph::affichageTopHits ()
 
 }
 
-// GERER QUAND FICHIER MOINS DE 10 ENTREES
-void Graph::add (string ligne)
+void Graph::add (const string ligne)
 {
-  //Découpage de la ligne : (pas générique)
   vector<string> ligneHach;    // Pas forcément vector??????
   split(ligne, ligneHach);
 
   //URL du GET
   string urlGet = ligneHach[6];
   string urlRef = ligneHach[10];
-  
-  const string heureRequete = ligneHach[3];
 
+  const string heureRequete = ligneHach[3];
   const int heureIntRequete = stoi(heureRequete.substr(13,2));
 
   //On enlève les guillemets
   urlRef.pop_back();
+
+  // On enlève l'URL locale
   if(urlRef.size() > 0)
   {
     urlRef = urlRef.substr(1,urlRef.size()-1);
-   
-    if (urlRef.find(URL_LOCALE)!= std::string::npos) 
+
+    if (urlRef.find(URL_LOCALE)!= std::string::npos)
     {
-		urlRef=urlRef.substr(URL_LOCALE.size(),urlRef.size()); 
-	}
+		    urlRef=urlRef.substr(URL_LOCALE.size(),urlRef.size());
+	  }
   }
-   //cout<<urlRef<<endl;
+
+  //On enlève les headers
   urlRef = urlRef.substr(0,urlRef.find("?"));
   urlRef = urlRef.substr(0,urlRef.find(";"));
 
@@ -108,7 +101,7 @@ void Graph::add (string ligne)
   urlGet = urlGet.substr(0,urlGet.find("?"));
   urlGet = urlGet.substr(0,urlGet.find(";"));
 
-  //On enlève le "/" si il est à la find
+  //On enlève le "/" si il est à la fin
   if(urlGet[urlGet.size()-1] == '/')
   {
     urlGet.pop_back();
@@ -186,8 +179,7 @@ void Graph::add (string ligne)
 
   //GET : On check si la page existe
   map <string,int>::iterator itIndexInvGet;
-  itIndexInvGet = indexInv.find(urlGet);// URL de la page GET
-
+  itIndexInvGet = indexInv.find(urlGet); // URL de la page GET
 
   //Si oui on augmente le nombre de hits
   if(itIndexInvGet != indexInv.end())
@@ -209,7 +201,6 @@ void Graph::add (string ligne)
     indexInv.insert(make_pair(urlGet, indicePage));
     indicePage++;
   }
-
 
   //REF : si ref pas "-"
  if(urlRef != "-")
@@ -259,10 +250,10 @@ void Graph::add (string ligne)
 }
 
 
-void Graph::createHighHit() //Cas limite : TabVide
+void Graph::createHighHit()
 {
     //On crée le vecteur
-   //tabIndiceMaxHits.resize(10);
+   tabIndiceMaxHits.reserve(10);
 
     //On rentre le premier
     map<int, infosPage>::iterator itGraph = mapPages.begin();
@@ -274,15 +265,15 @@ void Graph::createHighHit() //Cas limite : TabVide
     //On remplit avec les 9 suivants
     int i=1;
     int maxTopHit=0;
-    
+
     if(mapPages.size()>10)
     {
-		maxTopHit=10;
-	}
-	else
-	{
-		maxTopHit=mapPages.size();
-	}
+		    maxTopHit=10;
+	  }
+	  else
+	  {
+		    maxTopHit=mapPages.size();
+	  }
 
     for(; i<maxTopHit; itGraph++)
     {
@@ -304,11 +295,11 @@ void Graph::createHighHit() //Cas limite : TabVide
 
           i++;
     }
+
 	if(mapPages.size()>10)
 	{
 		//On passe à la 11ème page pour la suite
 		itGraph++;
-
 
 		//On reparcourt toute la map
 		for( ; itGraph != mapPages.end(); itGraph++)
@@ -316,21 +307,19 @@ void Graph::createHighHit() //Cas limite : TabVide
 		  vector<int>::iterator itVect;
 		  for(itVect = tabIndiceMaxHits.begin(); itVect!= tabIndiceMaxHits.end(); itVect++)
 		  {
-			itComp = mapPages.find(*itVect);
-			if(itGraph->second.hits > itComp->second.hits)
-			{
-			  tabIndiceMaxHits.pop_back();
-			  tabIndiceMaxHits.insert(itVect, itGraph->first);
-			  break;
-			}
-
+  			itComp = mapPages.find(*itVect);
+  			if(itGraph->second.hits > itComp->second.hits)
+  			{
+  			  tabIndiceMaxHits.pop_back();
+  			  tabIndiceMaxHits.insert(itVect, itGraph->first);
+  			  break;
+  			}
 		  }
-
 		}
 	}
 }
 
-void Graph::split (string ligne, vector<string> & ligneHach)
+void Graph::split (const string ligne, vector<string> & ligneHach)
 {
     int pos = 0;
     int pos1 = 0;
@@ -339,76 +328,44 @@ void Graph::split (string ligne, vector<string> & ligneHach)
 
     while(pos1 != -1)
     {
-
   		ligneHach.push_back(ligne.substr(pos, pos1-pos));
   		pos = pos1+1;
 
       pos1 = ligne.find(delimiteur, pos);
-
     }
 } //----- Fin de Méthode
 
 void Graph::createGraph()
 {
-    //Penser à prévenir ou vérifier que fichier existe etc...
-
     ofstream fichier(nomDot, ios::out | ios::trunc);
 
             if(fichier)
             {
+                fichier << "digraph {" << endl;
+                //On parcourt mapPages pour les noeuds
+                for(map<int, infosPage>::iterator itGraph = mapPages.begin(); itGraph != mapPages.end(); itGraph++)
+                {
+                    map<int,string>::iterator itIndex = index.find(itGraph->first);
+                    fichier <<"node" << itGraph->first << " [label=\"" << itIndex->second << "\"];" << endl;
+                }
 
-                    fichier << "digraph {" << endl;
-                    //On parcourt mapPages pour les noeuds
-                    for(map<int, infosPage>::iterator itGraph = mapPages.begin(); itGraph != mapPages.end(); itGraph++)
-                    {
-                        map<int,string>::iterator itIndex = index.find(itGraph->first);
-                        fichier <<"node" << itGraph->first << " [label=\"" << itIndex->second << "\"];" << endl;
-                    }
-                    
-                     for(map<int, infosPage>::iterator itGraph = mapPages.begin(); itGraph != mapPages.end(); itGraph++)
-                    {
-                        map<int,string>::iterator itIndex = index.find(itGraph->first);
-                       for(map<int,int>::iterator itConnexion = itGraph->second.connexions.begin(); itConnexion != itGraph->second.connexions.end(); itConnexion++)
-                        {
-                          fichier << "node" << itGraph->first <<" -> node" << itConnexion->first <<" [label=\"" << itConnexion->second <<"\"];" <<endl;
-                        }
+               for(map<int, infosPage>::iterator itGraph = mapPages.begin(); itGraph != mapPages.end(); itGraph++)
+              {
+                 for(map<int,int>::iterator itConnexion = itGraph->second.connexions.begin(); itConnexion != itGraph->second.connexions.end(); itConnexion++)
+                {
+                    fichier << "node" << itGraph->first <<" -> node" << itConnexion->first <<" [label=\"" << itConnexion->second <<"\"];" <<endl;
+                }
 
-                    }
-                    
-                     
+              }
 
-                    fichier << "}";
-                    fichier.close();
+              fichier << "}";
+              fichier.close();
             }
             else
-                    cerr << "Impossible d'ouvrir le fichier !" << endl;
-
-
-
+            {
+              cerr << "Impossible d'ouvrir le fichier " << nomDot << endl;
+            }
 }
-//------------------------------------------------- Surcharge d'opérateurs
-//~ Graph & Graph::operator = ( const Graph & unGraph )
-//~ // Algorithme :
-//~ //
-//~ {
-//~ #ifdef DEBUG
-    //~ cout << "Appel a la surcharge de l operateur d affectation de <Graph>" << endl;
-//~ #endif
-	//~ cout << "Votre code a inserer ici ..." << endl;
-	//~ return *this;
-//~ } //----- Fin de operator =
-
-
-//-------------------------------------------- Constructeurs - destructeur
-//~ Graph::Graph ( const Graph & unGraph )
-//~ // Algorithme :
-//~ //
-//~ {
-//~ #ifdef DEBUG
-    //~ cout << "Appel au constructeur de copie de <Graph>" << endl;
-//~ #endif
-	//~ cout << "Votre code a inserer ici ..." << endl;
-//~ } //----- Fin de Graph (constructeur de copie)
 
 //Pas sûr que tout mettre dans le constructeur très bonne idée (méthodes séparées ?)
 Graph::Graph (string nl, string nD, bool eDoc, int h)
@@ -419,10 +376,9 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
 
 	nomLog = nl;
   nomDot = nD;
-  indicePage =0;
+  indicePage = 0;
   excluDoc = eDoc;
   heure = h;
-
 
 	//Création du lecteur
 	lecteurLog monlecteurLog;
@@ -435,7 +391,6 @@ Graph::Graph (string nl, string nD, bool eDoc, int h)
 	  affichageTopHits();
 
 	  //Affichage de tout
-	  //affichageMapPages(mapPages);
 	  //affichage2(mapPages);
 
 	  if(nomLog != "false")
