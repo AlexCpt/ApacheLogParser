@@ -1,0 +1,7 @@
+Test ID;Return code validation;Out result;StdErr result;File creation result;Global result
+TestArgumentInconnu;1;2;1;2;1
+TestFichierInexistant;2;2;1;2;1
+TestNoArguments;1;2;0;2;0
+TestPasDot;1;2;0;2;0
+TestPasLog;1;2;1;2;1
+TestTropArguments;1;2;1;2;1
