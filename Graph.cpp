@@ -79,17 +79,27 @@ void Graph::add (const string ligne)
 	//On enlève le "/" si il est à la fin
 	if(urlGet[urlGet.size()-1] == '/')
 	{
-	urlGet.pop_back();
+    if(urlGet!="/")
+    {
+      urlGet.pop_back();
+    }
 	}
 	if(urlRef[urlRef.size()-1] == '/')
 	{
-	urlRef.pop_back();
+    if(urlRef!="/")
+    {
+      urlRef.pop_back();
+    }
 	}
 
 	//On check si pas doc
 	if(excluDoc)
 	{
 		if(urlGet.find(".jpg") != std::string::npos)
+		{
+			return;
+		}
+    if(urlGet.find(".JPG") != std::string::npos)
 		{
 			return;
 		}
@@ -141,6 +151,10 @@ void Graph::add (const string ligne)
 		{
 			return;
 		}
+    else if(urlGet.find(".txt") != std::string::npos) //utile ?
+		{
+			return;
+		}
 	}
 
 	// Tri horaire
@@ -174,12 +188,14 @@ void Graph::add (const string ligne)
     mapPages.insert(make_pair(indicePage, monInfosPages)); // ou insert({i, monInfosPages})
     index.insert(make_pair(indicePage, urlGet));
     indexInv.insert(make_pair(urlGet, indicePage));
+
     indicePage++;
   }
 
   //REF : si ref pas "-"
  if(urlRef != "-")
  {
+   itIndexInvGet = indexInv.find(urlGet);
    //REF : On check si la page existe
    map<string,int>::iterator itIndexInvRef= indexInv.find(urlRef);
 
@@ -214,10 +230,11 @@ void Graph::add (const string ligne)
      indexInv.insert(make_pair(urlRef, indicePage));
 
 
-     //REF et on crée la connexion
+     //REF : et on crée la connexion
      map <int,infosPage>::iterator itPages;
      itPages = mapPages.find(indicePage); //i de Ref
      itPages->second.connexions.insert(make_pair(itIndexInvGet->second, 1));
+
 
       indicePage++;
    }
